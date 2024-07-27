@@ -9,23 +9,7 @@ CONFIG_DIR = config
 SRC_DIR = src
 INC_DIR = include
 
-define ReadProjectConfig
-$(shell node -p '\
-    const getVal = (key = "", obj = {}) => {
-          const currKey = key.split(".")[0];
-          const val = obj[currKey];
-          if(typeof val !== "object") return val;
-          const nextKey = key.split(".").slice(1).join(".");
-          return getVal(nextKey, val);
-    }; \
-    getVal(`$(1)`.replace(" ", ""), require("./$(CONFIG_DIR)/project.json")); \
-')
-endef
-
-VERSION = $(call ReadProjectConfig, version)
-NAME = $(call ReadProjectConfig, name)
-APP = $(NAME)_$(VERSION)
-
+APP = "project"
 
 # All compiler flags
 CXX = g++
@@ -68,23 +52,7 @@ clean:
 cleanall:
 	rm -rf $(OBJ_DIR)/*
 	rm -f $(BIN_DIR)/$(APP)
-
-# Initialize the project
-.PHONY: init
-name ?= my_project
-init:
-	echo "initializing project..."
-	mkdir -p $(DEP_DIR)
-	mkdir -p $(BIN_DIR)
-	mkdir -p $(OBJ_DIR)
-	mkdir -p $(CONFIG_DIR)
-	mkdir -p $(SRC_DIR)
-	mkdir -p $(INC_DIR)
-	echo "{\n\t\"name\": \"$(name)\",\n\t\"version\": \"0.1.0\"\n}" > $(CONFIG_DIR)/project.json
-	echo "#ifndef $(name)_h\n#define $(name)_h\n\nint main();\n\n#endif" > $(INC_DIR)/$(name).h
-	echo "#include \"$(name).h\"\n\nint main() {\n\treturn 0;\n}" > $(SRC_DIR)/$(name).cpp
-	echo "done!"
-
+	
 # PATH directories, where system wide binaries are stored
 HOME_DIR = /Users/$(USER)
 PATH_BIN_DIR = $(HOME_DIR)/Documents/dev/.bin

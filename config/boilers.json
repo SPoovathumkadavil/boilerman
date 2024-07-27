@@ -1,0 +1,6 @@
+{
+  "c_pp": {
+    "type": "makefile",
+    "language": ["c", "cpp"],
+  }
+}
