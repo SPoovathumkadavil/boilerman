@@ -71,6 +71,13 @@ install:
 	echo "installing config files..."
 	mkdir -p $(P_PATH_CONFIG_DIR)
 	cp -r $(CONFIG_DIR)/* $(P_PATH_CONFIG_DIR) 2>/dev/null || :
+	echo "removing unnessesary path directories..."
+	if [ -z "$(ls -A $(P_PATH_DEP_DIR))" ]; then \
+		rm -rf $(P_PATH_DEP_DIR); \
+	fi
+	if [ -z "$(ls -A $(P_PATH_CONFIG_DIR))" ]; then \
+		rm -rf $(P_PATH_CONFIG_DIR); \
+	fi
 	echo "done!"
 
 # Remove all project files from respective sys-wide directories
