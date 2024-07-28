@@ -71,6 +71,8 @@ install:
 	echo "installing config files..."
 	mkdir -p $(P_PATH_CONFIG_DIR)
 	cp -r $(CONFIG_DIR)/* $(P_PATH_CONFIG_DIR) 2>/dev/null || :
+	rmdir $(P_PATH_DEP_DIR) 2>/dev/null || :
+	rmdir $(P_PATH_CONFIG_DIR) 2>/dev/null || :
 	echo "done!"
 
 # Remove all project files from respective sys-wide directories
