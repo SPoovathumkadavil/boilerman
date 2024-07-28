@@ -73,13 +73,13 @@ int main(int argc, char **argv) {
 
 	if (argc < 2) {
 		std::cerr << "error: No arguments provided" << std::endl;
-		std::cerr << "try 'boilermanager --help' for more information." << std::endl;
+		std::cerr << "try '" + PROJECT_NAME + " --help' for more information." << std::endl;
 		return 1;
 	}
 
 	for (int i = 1; i < argc; i++) {
 		if (std::string(argv[i]) == "--help" || std::string(argv[i]) == "-h") {
-			std::cout << "usage: boilermanager [options] [boilerplate name]" << std::endl;
+			std::cout << "usage: " + PROJECT_NAME + " [options] [boilerplate name]" << std::endl;
 			std::cout << "options:" << std::endl;
 			std::cout << "  -h, --help\t\tshow this help message" << std::endl;
 			std::cout << "  -l, --list\t\tlist all available boilerplates" << std::endl;
