@@ -12,7 +12,8 @@
 
 // get home directory
 // if HOME environment variable is not set, getpwuid() is used to get the home directory
-std::string get_home_dir() {
+std::string get_home_dir()
+{
     const char *homedir;
     if ((homedir = getenv("HOME")) == NULL)
         homedir = getpwuid(getuid())->pw_dir;
@@ -20,36 +21,46 @@ std::string get_home_dir() {
 };
 
 // get current working directory, this is the directory where the executable is run from
-std::string get_current_dir() {
+std::string get_current_dir()
+{
     return std::filesystem::current_path();
 };
 
-std::vector<std::string> get_files_in_dir(std::string dir) {
+std::vector<std::string> get_files_in_dir(std::string dir)
+{
     std::vector<std::string> files;
-    for (const auto & entry : std::filesystem::directory_iterator(dir)) {
-        if (!std::filesystem::is_directory(entry.path())) {
+    for (const auto &entry : std::filesystem::directory_iterator(dir))
+    {
+        if (!std::filesystem::is_directory(entry.path()))
+        {
             files.push_back(entry.path());
         }
     }
     return files;
 };
 
-std::vector<std::string> get_dirs_in_dir(std::string dir) {
+std::vector<std::string> get_dirs_in_dir(std::string dir)
+{
     std::vector<std::string> dirs;
-    for (const auto & entry : std::filesystem::directory_iterator(dir)) {
-        if (std::filesystem::is_directory(entry.path())) {
+    for (const auto &entry : std::filesystem::directory_iterator(dir))
+    {
+        if (std::filesystem::is_directory(entry.path()))
+        {
             dirs.push_back(entry.path());
         }
     }
     return dirs;
 };
 
-std::vector<std::string> read_file(std::string filename) {
+std::vector<std::string> read_file(std::string filename)
+{
     std::vector<std::string> lines;
     std::ifstream file(filename);
-    if (file.is_open()) {
+    if (file.is_open())
+    {
         std::string line;
-        while (std::getline(file, line)) {
+        while (std::getline(file, line))
+        {
             lines.push_back(line);
         }
         file.close();
@@ -57,10 +68,13 @@ std::vector<std::string> read_file(std::string filename) {
     return lines;
 };
 
-void write_file(std::string filename, std::vector<std::string> lines) {
+void write_file(std::string filename, std::vector<std::string> lines)
+{
     std::ofstream file(filename);
-    if (file.is_open()) {
-        for (std::string line : lines) {
+    if (file.is_open())
+    {
+        for (std::string line : lines)
+        {
             file << line << std::endl;
         }
         file.close();
@@ -70,7 +84,7 @@ void write_file(std::string filename, std::vector<std::string> lines) {
 // read project.json for project name
 const std::string HOME_DIR = get_home_dir();
 const std::string PROJECT_NAME = "boilerman";
-std::string DEPENDENCIES_DIR = HOME_DIR + "/Documents/dev/.dependencies/" + PROJECT_NAME;
-std::string CONFIG_DIR = HOME_DIR + "/Documents/dev/.config/" + PROJECT_NAME;
+std::string DEPENDENCIES_DIR = HOME_DIR + "/dev/.dependencies/" + PROJECT_NAME;
+std::string CONFIG_DIR = HOME_DIR + "/dev/.config/" + PROJECT_NAME;
 
 #endif
