@@ -3,44 +3,49 @@
 
 #include <string>
 
-enum class BoilerType {
-    Makefile,
-    CMake,
-    Unknown
-};
-
-enum class BoilerLanguage {
-    Cpp,
-    C,
-    Unknown
-};
-
-class Boiler {
+class Boiler
+{
 public:
     Boiler() = default;
-    Boiler(const std::string& name, BoilerType type, BoilerLanguage language) : name_(name), type_(type), language_(language) {};
-    std::string name() const {
+    Boiler(const std::string &name, const std::string &desc, std::string type, std::string language) : name_(name), description_(desc), type_(type), language_(language) {};
+    std::string name() const
+    {
         return name_;
     }
-    void setName(const std::string& name) {
+    void setName(const std::string &name)
+    {
         name_ = name;
     }
-    BoilerType type() const {
+    std::string description() const
+    {
+        return description_;
+    }
+    void setDescription(const std::string &desc)
+    {
+        description_ = desc;
+    }
+    std::string type() const
+    {
         return type_;
     }
-    void setType(BoilerType type) {
+    void setType(std::string type)
+    {
         type_ = type;
     }
-    BoilerLanguage language() const {
+    std::string language() const
+    {
         return language_;
     }
-    void setLanguage(BoilerLanguage language) {
+    void setLanguage(std::string language)
+    {
         language_ = language;
     }
+
 private:
     std::string name_;
-    BoilerType type_;
-    BoilerLanguage language_;
+    std::string description_;
+    std::string type_;
+    std::string language_;
 };
 
 #endif
