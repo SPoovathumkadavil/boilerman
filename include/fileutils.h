@@ -81,10 +81,34 @@ void write_file(std::string filename, std::vector<std::string> lines)
     }
 };
 
+std::string read_json_string(std::string filename, std::string key)
+{
+    std::ifstream file(filename);
+    if (file.is_open())
+    {
+        std::string line;
+        while (std::getline(file, line))
+        {
+            if (line.find(key) != std::string::npos)
+            {
+                std::string value = line.substr(line.find(":") + 1);
+                // remove leading and trailing whitespaces and quotes
+                value.erase(0, value.find_first_not_of(" \t\n\r\f\v\""));
+                value.erase(value.find_last_of("\""));
+                return value;
+            }
+        }
+        file.close();
+    }
+    return "";
+}
+
 // read project.json for project name
+
 const std::string HOME_DIR = get_home_dir();
 const std::string PROJECT_NAME = "boilerman";
-std::string DEPENDENCIES_DIR = HOME_DIR + "/dev/.dependencies/" + PROJECT_NAME;
-std::string CONFIG_DIR = HOME_DIR + "/dev/.config/" + PROJECT_NAME;
+const std::string LOC_FILE = HOME_DIR + "/.loc.json";
+std::string DEPENDENCIES_DIR = read_json_string(LOC_FILE, "dependencies") + "/" + PROJECT_NAME;
+std::string CONFIG_DIR = read_json_string(LOC_FILE, "config") + "/" + PROJECT_NAME;
 
 #endif

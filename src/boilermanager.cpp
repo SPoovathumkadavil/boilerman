@@ -5,6 +5,7 @@
 
 void BoilerManager::loadBoilers()
 {
+	std::printf("Loading boilerplates from %s\n", DEPENDENCIES_DIR.c_str());
 	std::vector<std::string> boilerDirs = get_dirs_in_dir(DEPENDENCIES_DIR);
 	for (const std::string &dir : boilerDirs)
 	{

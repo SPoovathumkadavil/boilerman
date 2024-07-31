@@ -1,6 +1,22 @@
 
 MAKEFLAGS += --silent
 
+HOME_DIR = /Users/$(USER)
+LOC_FILE = $(HOME_DIR)/.loc.json
+
+define ReadLoc
+$(shell node -p '\
+    const getVal = (key = "", obj = {}) => {
+          const currKey = key.split(".")[0];
+          const val = obj[currKey];
+          if(typeof val !== "object") return val;
+          const nextKey = key.split(".").slice(1).join(".");
+          return getVal(nextKey, val);
+    }; \
+    getVal(`$(1)`.replace(" ", ""), require("$(LOC_FILE)")); \
+')
+endef
+
 # Project directories, where the local project files are stored
 DEP_DIR = dependencies
 OBJ_DIR = obj
@@ -56,10 +72,9 @@ cleanall:
 	rm -f $(BIN_DIR)/$(APP)
 
 # PATH directories, where system wide binaries are stored
-HOME_DIR = /Users/$(USER)
-PATH_BIN_DIR = $(HOME_DIR)/dev/.bin
-P_PATH_DEP_DIR = $(HOME_DIR)/dev/.dependencies/$(APP)
-P_PATH_CONFIG_DIR = $(HOME_DIR)/dev/.config/$(APP)
+PATH_BIN_DIR = $(call ReadLoc, bin)
+P_PATH_DEP_DIR = $(call ReadLoc, dependencies)/$(APP)
+P_PATH_CONFIG_DIR = $(call ReadLoc, config)/$(APP)
 
 # Move all binaries to respective directories
 .PHONY: install
