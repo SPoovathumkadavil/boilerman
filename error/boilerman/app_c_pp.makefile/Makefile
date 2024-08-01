@@ -1,7 +1,7 @@
 
 MAKEFLAGS += --silent
 
-HOME_DIR = /Users/$(USER)
+HOME_DIR = $(HOME)
 LOC_FILE = $(HOME_DIR)/.loc.json
 
 define ReadLoc
@@ -13,7 +13,11 @@ $(shell node -p '\
           const nextKey = key.split(".").slice(1).join(".");
           return getVal(nextKey, val);
     }; \
-    getVal(`$(1)`.replace(" ", ""), require("$(LOC_FILE)")); \
+		if (require("fs").existsSync("$(LOC_FILE)")) { \
+    	getVal(`$(1)`.replace(" ", ""), require("$(LOC_FILE)")); \
+		} else { \
+			"error"; \
+		} \
 ')
 endef
 
@@ -25,13 +29,13 @@ CONFIG_DIR = config
 SRC_DIR = src
 INC_DIR = include
 
-APP = boilerman
+APP = "project"
 
 # All compiler flags
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -Wextra -Werror -c -I$(INC_DIR) -g
+CXXFLAGS = -std=c++17 -Wall -Wextra -Werror -I$(INC_DIR) -g
 C = gcc
-CFLAGS = -std=c11 -Wall -Wextra -Werror -c -I$(INC_DIR) -g
+CFLAGS = -std=c11 -Wall -Wextra -Werror -I$(INC_DIR) -g
 LD = g++
 LDFLAGS = -L/usr/local/lib -I$(INC_DIR)
 LDLIBS = -lm
@@ -45,6 +49,16 @@ OBJ_FILES = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(CPP_SRC_FILES)) $(pat
 build: cleanall $(OBJ_FILES)
 	echo "linking objects..."
 	$(LD) $(LDFLAGS) $(OBJ_FILES) -o $(BIN_DIR)/$(APP) $(LDLIBS)
+	echo "done!"
+
+# Initialize the project
+.PHONY: init
+init:
+	echo "initializing project..."
+	mkdir -p $(OBJ_DIR)
+	mkdir -p $(BIN_DIR)
+	mkdir -p $(CONFIG_DIR)
+	mkdir -p $(DEP_DIR)
 	echo "done!"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
@@ -73,13 +87,13 @@ cleanall:
 
 # if install or uninstall is called, check if the directories exist
 ifneq ($(filter install uninstall, $(MAKECMDGOALS)),)
-$(if $(call ReadLoc, bin),,$(error ensure there is a .loc.json file in the home directory. if not run `make loc`))
+$(if $(eq $(call ReadLoc, "bin"), "error"), $(error "Please run 'make loc' first to create a .loc.json file in the home directory"))
 endif
 
 # PATH directories, where system wide binaries are stored
 PATH_BIN_DIR = $(call ReadLoc, bin)
-P_PATH_DEP_DIR = $(call ReadLoc, dependencies)/$(APP)
-P_PATH_CONFIG_DIR = $(call ReadLoc, config)/$(APP)
+P_PATH_DEP_DIR = $(call ReadLoc, dependencies)
+P_PATH_CONFIG_DIR = $(call ReadLoc, config)
 
 # Move all binaries to respective directories
 .PHONY: install
@@ -93,6 +107,7 @@ install: uninstall
 	echo "installing config files..."
 	mkdir -p $(P_PATH_CONFIG_DIR)
 	cp -r $(CONFIG_DIR)/* $(P_PATH_CONFIG_DIR) 2>/dev/null || :
+	echo "removing unnessesary path directories..."
 	rmdir $(P_PATH_DEP_DIR) 2>/dev/null || :
 	rmdir $(P_PATH_CONFIG_DIR) 2>/dev/null || :
 	echo "done!"
@@ -116,32 +131,18 @@ help:
 	@echo ""
 	@echo "Targets:"
 	@echo "  build       - Compile the project"
-	@echo "  run         - Run the compiled binary"
 	@echo "  clean       - Clean all object files"
 	@echo "  cleanall    - Clean all object files and the binary"
+	@echo "  init        - Initialize the project (creates local directories)"
 	@echo "  install     - Install the project"
 	@echo "  uninstall   - Uninstall the project"
 	@echo "  help        - Display this help message"
-	@echo "  loc         - Downloads loc-maker cli tool and creates a .loc.json file in the home directory"
-	@echo ""
-	@echo "Variables:"
-	@echo "  name        - Name of the project, set during initialization to change the project name"
-	@echo ""
-	@echo "Example:"
-	@echo "  make init name=my_project"
-	@echo "  make build"
-	@echo "  make run"
-	@echo "  make clean"
-	@echo "  make cleanall"
-	@echo "  make install"
-	@echo "  make uninstall"
-	@echo "  make help"
-	@echo ""
+	@echo "  loc         - Downloads loc-maker cli and uses it to create a .loc.json file in the home directory"
 
 .PHONY: loc
 loc:
 	echo "downloading loc-maker..."
-	curl -L -O https://github.com/SPoovathumkadavil/loc-maker/releases/download/release/loc-maker
+	curl -O https://github.com/SPoovathumkadavil/loc-maker/releases/download/release/loc-maker
 	chmod +x loc-maker
 	echo "creating .loc.json file..."
 	./loc-maker -n dependencies=$(HOME)/dev/.dependencies bin=$(HOME)/dev/.bin config=$(HOME)/dev/.config scripts=$(HOME)/dev/.scripts workspace=$(HOME)/dev/.workspace
