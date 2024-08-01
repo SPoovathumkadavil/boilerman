@@ -77,7 +77,7 @@ cleanall:
 
 # if install or uninstall is called, check if the directories exist
 ifneq ($(filter install uninstall, $(MAKECMDGOALS)),)
-$(error $(if $(PATH_BIN_DIR),error,ensure there is a .loc.json file in the home directory. if not run `make loc`))
+$(if $(call ReadLoc, bin),,$(error ensure there is a .loc.json file in the home directory. if not run `make loc`))
 endif
 
 # PATH directories, where system wide binaries are stored
@@ -125,10 +125,10 @@ help:
 	@echo "  run         - Run the compiled binary"
 	@echo "  clean       - Clean all object files"
 	@echo "  cleanall    - Clean all object files and the binary"
-	@echo "  init        - Initialize the project"
 	@echo "  install     - Install the project"
 	@echo "  uninstall   - Uninstall the project"
 	@echo "  help        - Display this help message"
+	@echo "  loc         - Downloads loc-maker cli tool and creates a .loc.json file in the home directory"
 	@echo ""
 	@echo "Variables:"
 	@echo "  name        - Name of the project, set during initialization to change the project name"
