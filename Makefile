@@ -1,8 +1,7 @@
 
 MAKEFLAGS += --silent
 
-HOME_DIR = /Users/$(USER)
-LOC_FILE = $(HOME_DIR)/.loc.json
+LOC_FILE = $(HOME)/.loc.json
 
 define ReadLoc
 $(shell node -p '\
