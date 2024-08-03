@@ -137,13 +137,19 @@ help:
 	@echo "  make help"
 	@echo ""
 
+TARGET_DEP = $(HOME)/dev/.dependencies
+TARGET_CONF = $(HOME)/dev/.config 
+TARGET_BIN = $(HOME)/dev/.bin 
+TARGET_SCRIPTS = $(HOME)/dev/.scripts 
+TARGET_WORK = $(HOME)/dev/workspace
+
 .PHONY: loc
 loc:
 	echo "downloading loc-maker..."
 	curl -L -O https://github.com/SPoovathumkadavil/loc-maker/releases/download/release/loc-maker
 	chmod +x loc-maker
 	echo "creating .loc.json file..."
-	./loc-maker -n dependencies=$(HOME)/dev/.dependencies bin=$(HOME)/dev/.bin config=$(HOME)/dev/.config scripts=$(HOME)/dev/.scripts workspace=$(HOME)/dev/.workspace
+	./loc-maker -n dependencies=$(TARGET_DEP) bin=$(TARGET_BIN) config=$(TARGET_CONF) scripts=$(TARGET_SCRIPTS) workspace=$(TARGET_WORK)
 	echo "cleaning up..."
 	rm loc-maker
 	echo "done."
