@@ -41,7 +41,7 @@ C_SRC_FILES += $(shell find $(SRC_DIR) -type f -name "*.c")
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(CPP_SRC_FILES)) $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(C_SRC_FILES))
 
 .PHONY: build
-build: cleanall $(OBJ_FILES)
+build: cleanall init $(OBJ_FILES)
 	echo "linking objects..."
 	$(LD) $(LDFLAGS) $(OBJ_FILES) -o $(BIN_DIR)/$(APP) $(LDLIBS)
 	echo "done!"
@@ -69,6 +69,12 @@ cleanall:
 	echo "cleaning all object files and the binary..."
 	rm -rf $(OBJ_DIR)/*
 	rm -f $(BIN_DIR)/$(APP)
+
+.PHONY: init
+init:
+	echo "creating local directories..."
+	mkdir -p $(BIN_DIR)
+	mkdir -p $(OBJ_DIR)
 
 # if install or uninstall is called, check if the directories exist
 ifneq ($(filter install uninstall, $(MAKECMDGOALS)),)
