@@ -3,6 +3,7 @@
 
 #include "boiler.h"
 #include <vector>
+#include <filesystem>
 
 class BoilerManager {
 public:
@@ -13,6 +14,7 @@ private:
     std::vector<Boiler> boilers;
 };
 
+void recursive_resolve_copy(std::filesystem::path input_dir_path, std::filesystem::path output_dir_path, std::string name);
 void handle_test_args(int argc, char *argv[]);
 int main(int argc, char **argv);
 
