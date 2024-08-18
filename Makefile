@@ -8,7 +8,7 @@ $(shell node -p "require('$(LOC_FILE)').$(1)")
 endef
 
 # Project directories, where the local project files are stored
-DEP_DIR = dependencies
+LIB_DIR = library
 OBJ_DIR = obj
 BIN_DIR = bin
 CONFIG_DIR = config
@@ -74,30 +74,30 @@ endif
 
 # PATH directories, where system wide binaries are stored
 PATH_BIN_DIR = $(call ReadLoc,bin)
-P_PATH_DEP_DIR = $(call ReadLoc,dependencies)/$(APP)
+P_PATH_LIB_DIR = $(call ReadLoc,library)/$(APP)
 P_PATH_CONFIG_DIR = $(call ReadLoc,config)/$(APP)
 
 # Move all binaries to respective directories
 .PHONY: install
 install: uninstall
-	echo "installing dependencies..."
-	mkdir -p $(P_PATH_DEP_DIR)
-	cp -r $(DEP_DIR)/* $(P_PATH_DEP_DIR) 2>/dev/null || :
+	echo "installing library..."
+	mkdir -p $(P_PATH_LIB_DIR)
+	cp -r $(LIB_DIR)/* $(P_PATH_LIB_DIR) 2>/dev/null || :
 	echo "installing binaries..."
 	mkdir -p $(PATH_BIN_DIR)
 	cp -r $(BIN_DIR)/* $(PATH_BIN_DIR) 2>/dev/null || :
 	echo "installing config files..."
 	mkdir -p $(P_PATH_CONFIG_DIR)
 	cp -r $(CONFIG_DIR)/* $(P_PATH_CONFIG_DIR) 2>/dev/null || :
-	rmdir $(P_PATH_DEP_DIR) 2>/dev/null || :
+	rmdir $(P_PATH_LIB_DIR) 2>/dev/null || :
 	rmdir $(P_PATH_CONFIG_DIR) 2>/dev/null || :
 	echo "done!"
 
 # Remove all project files from respective sys-wide directories
 .PHONY: uninstall
 uninstall:
-	echo "uninstalling dependencies..."
-	rm -rf $(P_PATH_DEP_DIR)
+	echo "uninstalling library..."
+	rm -rf $(P_PATH_LIB_DIR)
 	echo "uninstalling config files..."
 	rm -rf $(P_PATH_CONFIG_DIR)
 	for file in $(BIN_DIR)/*; do \
@@ -120,21 +120,8 @@ help:
 	@echo "  help        - Display this help message"
 	@echo "  loc         - Downloads loc-maker cli tool and creates a .loc.json file in the home directory"
 	@echo ""
-	@echo "Variables:"
-	@echo "  name        - Name of the project, set during initialization to change the project name"
-	@echo ""
-	@echo "Example:"
-	@echo "  make init name=my_project"
-	@echo "  make build"
-	@echo "  make run"
-	@echo "  make clean"
-	@echo "  make cleanall"
-	@echo "  make install"
-	@echo "  make uninstall"
-	@echo "  make help"
-	@echo ""
 
-TARGET_DEP = $(HOME)/dev/.dependencies
+TARGET_LIB = $(HOME)/dev/.library
 TARGET_CONF = $(HOME)/dev/.config 
 TARGET_BIN = $(HOME)/dev/.bin 
 TARGET_SCRIPTS = $(HOME)/dev/.scripts 
@@ -146,7 +133,7 @@ loc:
 	curl -L -O https://github.com/SPoovathumkadavil/loc-maker/releases/download/release/loc-maker
 	chmod +x loc-maker
 	echo "creating .loc.json file..."
-	./loc-maker -n dependencies=$(TARGET_DEP) bin=$(TARGET_BIN) config=$(TARGET_CONF) scripts=$(TARGET_SCRIPTS) workspace=$(TARGET_WORK)
+	./loc-maker -n library=$(TARGET_LIB) bin=$(TARGET_BIN) config=$(TARGET_CONF) scripts=$(TARGET_SCRIPTS) workspace=$(TARGET_WORK)
 	echo "cleaning up..."
 	rm loc-maker
 	echo "done."

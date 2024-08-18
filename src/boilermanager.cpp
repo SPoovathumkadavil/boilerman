@@ -57,8 +57,8 @@ void recursive_resolve_copy(std::filesystem::path input_dir_path,
 }
 
 void BoilerManager::loadBoilers() {
-  // std::printf("Loading boilerplates from %s\n", DEPENDENCIES_DIR.c_str());
-  std::vector<std::string> boilerDirs = get_dirs_in_dir(DEPENDENCIES_DIR);
+  // std::printf("Loading boilerplates from %s\n", LIBRARY_DIR.c_str());
+  std::vector<std::string> boilerDirs = get_dirs_in_dir(LIBRARY_DIR);
   for (const std::string &dir : boilerDirs) {
     std::string dirname = dir.substr(dir.find_last_of("/\\") + 1);
     std::string name = dirname.substr(dirname.find_first_of("_") + 1,
@@ -88,10 +88,10 @@ std::vector<Boiler> BoilerManager::getBoilers() const { return boilers; }
 
 void handle_test_args(int argc, char *argv[]) {
   for (int i = 1; i < argc; i++) {
-    // flags -d and -c to change dependencies and config directories
-    if (std::string(argv[i]) == "-d") {
+    // flags -d and -c to change library and config directories
+    if (std::string(argv[i]) == "-l") {
       if (i + 1 < argc) {
-        DEPENDENCIES_DIR = argv[i + 1];
+        LIBRARY_DIR = argv[i + 1];
       }
     }
     if (std::string(argv[i]) == "-c") {
@@ -101,7 +101,7 @@ void handle_test_args(int argc, char *argv[]) {
     }
     // alternatively use -t to set test mode and change dirs automatically
     if (std::string(argv[i]) == "-t") {
-      DEPENDENCIES_DIR = "dependencies";
+      LIBRARY_DIR = "library";
       CONFIG_DIR = "config";
     }
   }
@@ -140,7 +140,7 @@ int main(int argc, char **argv) {
       std::cout
           << "  -n, --name [name]\tset the project name before initialization."
           << std::endl;
-      std::cout << "  -d [dir]\t\tset the dependencies directory" << std::endl;
+      std::cout << "  -l [dir]\t\tset the library directory" << std::endl;
       std::cout << "  -c [dir]\t\tset the config directory" << std::endl;
       std::cout << "  -t\t\t\tset test mode" << std::endl;
       return 0;
@@ -192,7 +192,7 @@ int main(int argc, char **argv) {
 
   if (init) {
     std::printf("using %s to make \"%s\"\n\n", boiler.name().c_str(), name.c_str());
-    std::string boilerDir = DEPENDENCIES_DIR + "/" + boiler.name();
+    std::string boilerDir = LIBRARY_DIR + "/" + boiler.name();
     recursive_resolve_copy(boilerDir, dir, name);
     std::printf("\nboilerplate successfully initialized !\n");
   }
