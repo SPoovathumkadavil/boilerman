@@ -26,6 +26,12 @@ void recursive_resolve_copy(std::filesystem::path input_dir_path,
       new_path.replace(new_path.find(input_dir_path.c_str()),
                        std::string(input_dir_path.c_str()).length(),
                        output_dir_path.c_str());
+      
+      // entry resolver
+      std::string name_search = "[[name]]";
+      while (new_path.find(name_search) != std::string::npos) {
+        new_path.replace(new_path.find(name_search), name_search.length(), name);
+      }
 
       std::printf("resolving %s --> %s\n", dirEntry.path().filename().c_str(),
                   new_path.c_str());
@@ -38,13 +44,8 @@ void recursive_resolve_copy(std::filesystem::path input_dir_path,
         std::string str = text.str();
 
         // in-file name search
-        std::string name_search = "[[name]]";
         while (str.find(name_search) != std::string::npos) {
           str.replace(str.find(name_search), name_search.length(), name);
-        }
-        // file-name name search
-        while (new_path.find(name_search) != std::string::npos) {
-          new_path.replace(new_path.find(name_search), name_search.length(), name);
         }
 
         in_file.close();
