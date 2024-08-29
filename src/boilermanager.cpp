@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
+#include <algorithm>
 
 void recursive_resolve_copy(std::filesystem::path input_dir_path,
                             std::filesystem::path output_dir_path,
@@ -29,8 +30,14 @@ void recursive_resolve_copy(std::filesystem::path input_dir_path,
       
       // entry resolver
       std::string name_search = "[[name]]";
+      std::string capital_name_search = "[%C[name]%C]";
       while (new_path.find(name_search) != std::string::npos) {
         new_path.replace(new_path.find(name_search), name_search.length(), name);
+      }
+      std::string capname = name;
+      std::transform(capname.begin(), capname.end(), capname.begin(), ::toupper);
+      while (new_path.find(capital_name_search) != std::string::npos) {
+        new_path.replace(new_path.find(capital_name_search), capital_name_search.length(), capname);
       }
 
       std::printf("resolving %s --> %s\n", dirEntry.path().filename().c_str(),
@@ -46,6 +53,9 @@ void recursive_resolve_copy(std::filesystem::path input_dir_path,
         // in-file name search
         while (str.find(name_search) != std::string::npos) {
           str.replace(str.find(name_search), name_search.length(), name);
+        }
+        while (str.find(capital_name_search) != std::string::npos) {
+          str.replace(str.find(capital_name_search), capital_name_search.length(), capname);
         }
 
         in_file.close();
