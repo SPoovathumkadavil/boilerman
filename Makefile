@@ -1,71 +1,54 @@
 
 MAKEFLAGS += --silent
 
-LOC_FILE = $(HOME)/.loc.json
+HOME_DIR = $(HOME)
+LOC_FILE = $(HOME_DIR)/.loc.json
 
 define ReadLoc
 $(shell node -p "require('$(LOC_FILE)').$(1)")
 endef
 
-# Project directories, where the local project files are stored
-LIB_DIR = library
-OBJ_DIR = obj
-BIN_DIR = bin
-CONFIG_DIR = config
-SRC_DIR = src
-INC_DIR = include
-
 APP = boilerman
 
-# All compiler flags
-CXX = g++
-CXXFLAGS = -std=c++17 -Wall -Wextra -Werror -c -I$(INC_DIR) -g
-C = gcc
-CFLAGS = -std=c11 -Wall -Wextra -Werror -c -I$(INC_DIR) -g
-LD = g++
-LDFLAGS = -L/usr/local/lib -I$(INC_DIR)
-LDLIBS = -lm
-
-# All compilable files
-CPP_SRC_FILES = $(shell find $(SRC_DIR) -type f -name "*.cpp")
-C_SRC_FILES += $(shell find $(SRC_DIR) -type f -name "*.c")
-OBJ_FILES = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(CPP_SRC_FILES)) $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(C_SRC_FILES))
+BUILD_DIR = build
+BUILD_DEV_DIR = $(BUILD_DIR)/dev
+LIB_DIR = library
+CONFIG_DIR = config
 
 .PHONY: build
-build: cleanall init $(OBJ_FILES)
-	echo "linking objects..."
-	$(LD) $(LDFLAGS) $(OBJ_FILES) -o $(BIN_DIR)/$(APP) $(LDLIBS)
-	echo "done!"
+build: clean
+	echo "building release ..."
+	cmake -S . -B build -D CMAKE_BUILD_TYPE=Release
+	cmake --build build
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+.PHONY: dev
+dev:
+	echo "building dev"
+	cmake --preset=dev
+	cmake --build --preset=dev
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	$(C) $(CFLAGS) -c $< -o $@
-
-# Run the compiled binary
 .PHONY: run
 run:
-	./$(BIN_DIR)/$(APP)
+	echo "running $(APP)...\n"
+	./$(BUILD_DEV_DIR)/$(APP)
 
-# Clean all object files
+.PHONY: test
+test: 
+	echo "running test"
+	$(BUILD_DEV_DIR)/test/$(APP)_test
+
 .PHONY: clean
 clean:
-	echo "cleaning all object files..."
-	rm -rf $(OBJ_DIR)/*
+	echo "cleaning build dir ..."
+	rm -rf $(BUILD_DIR)
 
-# Clean all object files and the binary
-.PHONY: cleanall
-cleanall:
-	echo "cleaning all object files and the binary..."
-	rm -rf $(OBJ_DIR)/*
-	rm -f $(BIN_DIR)/$(APP)
-
+# Initialize the project
 .PHONY: init
 init:
-	echo "creating local directories..."
-	mkdir -p $(BIN_DIR)
-	mkdir -p $(OBJ_DIR)
+	echo "initializing project..."
+	mkdir -p $(CONFIG_DIR)
+	mkdir -p $(LIB_DIR)
+	echo "done!"
 
 # if install or uninstall is called, check if the directories exist
 ifneq ($(filter install uninstall, $(MAKECMDGOALS)),)
@@ -85,10 +68,11 @@ install: uninstall
 	cp -r $(LIB_DIR)/* $(P_PATH_LIB_DIR) 2>/dev/null || :
 	echo "installing binaries..."
 	mkdir -p $(PATH_BIN_DIR)
-	cp -r $(BIN_DIR)/* $(PATH_BIN_DIR) 2>/dev/null || :
+	cp -r $(BUILD_DIR)/$(APP) $(PATH_BIN_DIR) 2>/dev/null || :
 	echo "installing config files..."
 	mkdir -p $(P_PATH_CONFIG_DIR)
 	cp -r $(CONFIG_DIR)/* $(P_PATH_CONFIG_DIR) 2>/dev/null || :
+	echo "removing unnessesary path directories..."
 	rmdir $(P_PATH_LIB_DIR) 2>/dev/null || :
 	rmdir $(P_PATH_CONFIG_DIR) 2>/dev/null || :
 	echo "done!"
@@ -100,26 +84,22 @@ uninstall:
 	rm -rf $(P_PATH_LIB_DIR)
 	echo "uninstalling config files..."
 	rm -rf $(P_PATH_CONFIG_DIR)
-	for file in $(BIN_DIR)/*; do \
-		echo "uninstalling binary (if exists): $$file"; \
-		rm -f $(PATH_BIN_DIR)/$$(basename $$file); \
-	done
+	echo "uninstalling binary (if exists)"
+	rm -f $(PATH_BIN_DIR)/$(APP)
 	echo "Done!"
 
 .PHONY: help
 help:
-	@echo "Usage: make [target]"
-	@echo ""
-	@echo "Targets:"
-	@echo "  build       - Compile the project"
-	@echo "  run         - Run the compiled binary"
-	@echo "  clean       - Clean all object files"
-	@echo "  cleanall    - Clean all object files and the binary"
-	@echo "  install     - Install the project"
-	@echo "  uninstall   - Uninstall the project"
-	@echo "  help        - Display this help message"
-	@echo "  loc         - Downloads loc-maker cli tool and creates a .loc.json file in the home directory"
-	@echo ""
+	echo "Available targets:"
+	echo "  build - Build the release version"
+	echo "  dev   - Build the development version"
+	echo "  test  - Run tests"
+	echo "  clean - Clean the build directory"
+	echo "  init  - Create supplemental development directories"
+	echo "  run   - Run the application"
+	echo "  install - Install the application"
+	echo "  uninstall - Uninstall the application"
+	echo "  help  - Display this help message"
 
 TARGET_LIB = $(HOME)/dev/.library
 TARGET_CONF = $(HOME)/dev/.config 

@@ -1,2 +1,10 @@
-obj
-bin
+**/.DS_Store
+.idea/
+.vs/
+.vscode/
+build/
+cmake-build-*/
+prefix/
+.clangd
+CMakeLists.txt.user
+compile_commands.json
