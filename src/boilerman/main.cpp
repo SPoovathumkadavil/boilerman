@@ -11,10 +11,10 @@ int main(int argc, char** argv)
   auto boilers = lib.populate_boilers();
 
   if (argc < 2) {
-    fmt::print(
-        fg(fmt::color::red),
-        "error: no arguments provided.\ntry {} --help for usage instructions.",
-        lib._name);
+    fmt::print(fg(fmt::color::pale_violet_red),
+               "error: no arguments provided.\ntry {} --help for usage "
+               "instructions.\n",
+               lib._name);
     return 1;
   }
 
@@ -24,23 +24,25 @@ int main(int argc, char** argv)
 
   for (int i = 0; i < argc; i++) {
     if (std::string(argv[i]) == "--help" || std::string(argv[i]) == "-h") {
-      fmt::print(
-          fg(fmt::color::cyan), "usage: {} [options] [command]\n", lib._name);
-      fmt::print(fg(fmt::color::cyan), "options:\n");
-      fmt::print(fg(fmt::color::cyan), "\t-n, --name [name]\t\tset name.\n");
-      fmt::print(fg(fmt::color::cyan), "commands:\n");
-      fmt::print(fg(fmt::color::cyan),
+      fmt::print(fg(fmt::color::sky_blue),
+                 "usage: {} [options] [command]\n",
+                 lib._name);
+      fmt::print(fg(fmt::color::sky_blue), "options:\n");
+      fmt::print(fg(fmt::color::sky_blue),
+                 "\t-n, --name [name]\t\tset name.\n");
+      fmt::print(fg(fmt::color::sky_blue), "commands:\n");
+      fmt::print(fg(fmt::color::sky_blue),
                  "\ti, init [index]\t\tinitialize a boilerplate.\n");
-      fmt::print(fg(fmt::color::cyan),
+      fmt::print(fg(fmt::color::sky_blue),
                  "\t-h, --help\t\tshow this help message.\n");
-      fmt::print(fg(fmt::color::cyan),
+      fmt::print(fg(fmt::color::sky_blue),
                  "\t-l, --list\t\tlist available boilerplates.\n");
       return 0;
     }
 
     if (std::string(argv[i]) == "--list" || std::string(argv[i]) == "-l") {
       for (int b = 0; b < (int)boilers.size(); b++) {
-        fmt::print(fg(fmt::color::cyan),
+        fmt::print(fg(fmt::color::sky_blue),
                    "{}. {}: {} ({})\n",
                    b + 1,
                    boilers[b]._lang,
@@ -51,11 +53,11 @@ int main(int argc, char** argv)
     }
 
     if (std::string(argv[i]) == "init" || std::string(argv[i]) == "i") {
-      if (i + 1 < argc) {
-        fmt::print(fg(fmt::color::red),
-                    "error: boiler index not provided.\ntry {} --help for "
-                    "usage instructions.",
-                    lib._name);
+      if (i + 1 >= argc) {
+        fmt::print(fg(fmt::color::pale_violet_red),
+                   "error: boiler index not provided.\ntry {} --help for "
+                   "usage instructions.\n",
+                   lib._name);
         return 1;
       }
 
@@ -66,10 +68,10 @@ int main(int argc, char** argv)
     }
 
     if (std::string(argv[i]) == "--name" || std::string(argv[i]) == "-n") {
-      if (i + 1 < argc) {
-        fmt::print(fg(fmt::color::red),
+      if (i + 1 >= argc) {
+        fmt::print(fg(fmt::color::pale_violet_red),
                    "error: project name not provided.\ntry {} --help for usage "
-                   "instructions.",
+                   "instructions.\n",
                    lib._name);
         return 1;
       }

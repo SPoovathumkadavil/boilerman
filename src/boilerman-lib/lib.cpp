@@ -12,7 +12,7 @@ library::library()
 std::vector<Boiler> library::populate_boilers()
 {
   std::vector<std::filesystem::path> b_dirs =
-      get_files_in_dir(project_directories.lib);
+      get_dirs_in_dir(project_directories.lib);
   std::vector<Boiler> boilers;
   for (std::filesystem::path d : b_dirs)
   {
