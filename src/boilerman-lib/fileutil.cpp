@@ -10,6 +10,7 @@
 std::string resolve_string(std::string str,
                            std::map<std::string, std::string> resolve_map)
 {
+  fmt::print(fg(fmt::color::pale_violet_red), "{}\n", str);
   for (std::map<std::string, std::string>::iterator pair = resolve_map.begin();
        pair != resolve_map.end();
        ++pair)
@@ -23,7 +24,7 @@ std::string resolve_string(std::string str,
     while (str.find(search_key) != std::string::npos)
       str.replace(str.find(search_key), search_key.length(), val);
     while (str.find(cap_search_key) != std::string::npos)
-      str.replace(str.find(search_key), search_key.length(), val);
+      str.replace(str.find(cap_search_key), cap_search_key.length(), cap_val);
   }
   return str;
 }
@@ -38,7 +39,9 @@ void recursive_resolve(std::filesystem::path dir_path,
     for (const auto& dir_entry :
          std::filesystem::recursive_directory_iterator(dir_path))
     {
-      std::string path_name = dir_entry.path().c_str();
+      std::string path_name = dir_entry.path();
+
+      fmt::print(fg(fmt::color::pale_violet_red), "{}", path_name);
 
       // entry resolver
       path_name = resolve_string(path_name, resolve_map);
@@ -93,8 +96,10 @@ void recursive_resolve_copy(std::filesystem::path input_dir_path,
     for (const auto& dir_entry :
          std::filesystem::recursive_directory_iterator(input_dir_path))
     {
+
       // the output path ("write path")
       std::string new_path = dir_entry.path().c_str();
+
       new_path.replace(new_path.find(input_dir_path.c_str()),
                        std::string(input_dir_path.c_str()).length(),
                        output_dir_path.c_str());
