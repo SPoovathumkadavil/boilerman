@@ -1,18 +1,13 @@
 #include "lib.hpp"
 #include <gtest/gtest.h>
 
+#include <filesystem>
+
 #define IS_TESTING true
 
-TEST(LibTests, TestNameIsRight_Zero)
+TEST(LibTests, FileExistsTest)
 {
-  auto lib = library {};
-  ASSERT_EQ(lib._name, "boilerman");
-}
-
-TEST(LibTests, TestNameIsRight_One)
-{
-  auto lib = library {};
-  ASSERT_NE(lib._name, "not boilerman");
+  ASSERT_TRUE(std::filesystem::exists("resources/meow.txt"));
 }
 
 int main(int argc, char** argv)

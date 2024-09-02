@@ -24,6 +24,12 @@ target_compile_features(boilerman_test PRIVATE cxx_std_17)
 include(GoogleTest)
 gtest_discover_tests(boilerman_test)
 
+# ---- add resource files ----
+
+file(GLOB_RECURSE test_resources "resources/*")
+file(COPY ${test_resources}
+     DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/resources)
+
 # ---- End-of-file commands ----
 
 add_folders(Test)
