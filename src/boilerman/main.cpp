@@ -73,7 +73,7 @@ int main(int argc, char** argv)
           std::cin >> u_ind;
           if (u_ind < 1 || u_ind > (int)boilers.size()) u_ind = -1;
         }
-        b_index = u_ind;
+        b_index = u_ind-1;
 
         // read project name
         fmt::print(fg(fmt::color::sky_blue), "project name: ");
@@ -83,7 +83,7 @@ int main(int argc, char** argv)
         fmt::print(fg(fmt::color::sky_blue), "destination directory: ");
         std::cin >> dir;
       } else {
-        b_index = std::stoi(argv[i + 1]);
+        b_index = std::stoi(argv[i + 1]-1);
 
         if (i + 2 < argc)
           dir = std::string(argv[i + 2]);
@@ -108,7 +108,7 @@ int main(int argc, char** argv)
   resolve_map["name"] = project_name;
 
   if (b_index > 0) {
-    boilers[b_index-1].use(dir, resolve_map);
+    boilers[b_index].use(dir, resolve_map);
   }
 
   return 0;
