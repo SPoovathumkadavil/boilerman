@@ -1,7 +1,7 @@
 
 #include <fstream>
 #include <sstream>
-
+#include <algorithm>
 #include "fileutil.hpp"
 
 #include <fmt/color.h>
