@@ -2,6 +2,7 @@
 
 #include <filesystem>
 #include <string>
+#include <map>
 
 class Boiler
 {
@@ -13,5 +14,5 @@ public:
   std::string _path;
   Boiler(std::string dir_path);
   ~Boiler() {};
-  void use(std::filesystem::path output_path, std::string resolve_name);
+  void use(std::filesystem::path output_path, std::map<std::string, std::string> resolve_map);
 };
