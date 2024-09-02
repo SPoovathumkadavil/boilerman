@@ -107,7 +107,7 @@ int main(int argc, char** argv)
   std::map<std::string, std::string> resolve_map;
   resolve_map["name"] = project_name;
 
-  if (b_index > 0) {
+  if (b_index >= 0) {
     boilers[b_index].use(dir, resolve_map);
   }
 
