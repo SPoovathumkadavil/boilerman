@@ -10,7 +10,6 @@
 std::string resolve_string(std::string str,
                            std::map<std::string, std::string> resolve_map)
 {
-  fmt::print(fg(fmt::color::pale_violet_red), "{}\n", str);
   for (std::map<std::string, std::string>::iterator pair = resolve_map.begin();
        pair != resolve_map.end();
        ++pair)
