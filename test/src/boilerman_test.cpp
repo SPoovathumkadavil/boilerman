@@ -1,6 +1,8 @@
 #include "lib.hpp"
 #include <gtest/gtest.h>
 
+#define IS_TESTING true
+
 TEST(LibTests, TestNameIsRight_Zero)
 {
   auto const lib = library {};

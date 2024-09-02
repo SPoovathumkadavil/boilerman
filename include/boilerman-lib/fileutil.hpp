@@ -3,6 +3,7 @@
 #include <string>
 #include <filesystem>
 #include <map>
+#include <vector>
 
 std::string resolve_string(std::string str, std::map<std::string, std::string> resolve_map);
 void recursive_resolve(std::filesystem::path dir_path, std::map<std::string, std::string> resolve_map);
