@@ -5,13 +5,13 @@
 
 TEST(LibTests, TestNameIsRight_Zero)
 {
-  auto const lib = library {};
+  auto lib = library {};
   ASSERT_EQ(lib._name, "boilerman");
 }
 
 TEST(LibTests, TestNameIsRight_One)
 {
-  auto const lib = library {};
+  auto lib = library {};
   ASSERT_NE(lib._name, "not boilerman");
 }
 
