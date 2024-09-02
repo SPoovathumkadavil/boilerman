@@ -1,14 +1,20 @@
 # ---- local ----
 
-list(APPEND CMAKE_PREFIX_PATH "/Users/sally/dev/.library/libs")
-
-find_package(fetalib REQUIRED)
-message("-- Package \"fetalib\" found: ${fetalib_FOUND}")
-target_link_libraries(boilerman_lib fetalib::fetalib)
+# find_package(fetalib REQUIRED)
+# message("-- Package \"fetalib\" found: ${fetalib_FOUND}")
+# target_link_libraries(boilerman_lib fetalib::fetalib)
 
 # ---- remote ----
 
 include(FetchContent)
+
+FetchContent_Declare(
+  fetalib
+  GIT_REPOSITORY https://github.com/SPoovathumkadavil/fetalib.git
+  GIT_TAG master
+)
+FetchContent_MakeAvailable(fetalib)
+target_link_libraries(boilerman_lib fetalib::fetalib)
 
 # ---- raylib ----
 # FetchContent_Declare(

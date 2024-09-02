@@ -1,9 +1,13 @@
 #include "lib.hpp"
 #include "fileutil.hpp"
 
+#ifndef IS_TESTING
+#define IS_TESTING false
+#endif
+
 library::library()
     : _name {"boilerman"}
-    , _test {false},  // TODO change
+    , _test {IS_TESTING},  // TODO change
     _feta_dir {feta::directories(_name, feta::directories::get_home_dir() / ".loc.json", _test)}
 {
   project_directories = _feta_dir.proj_dirs();
