@@ -1,6 +1,6 @@
 # boilerman
 
-This is the [[project]] project.
+This is the boilerman project.
 
 # Building and installing
 
