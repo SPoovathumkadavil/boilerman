@@ -83,7 +83,7 @@ int main(int argc, char** argv)
         fmt::print(fg(fmt::color::sky_blue), "destination directory: ");
         std::cin >> dir;
       } else {
-        b_index = std::stoi(argv[i + 1]-1);
+        b_index = std::stoi(argv[i + 1])-1;
 
         if (i + 2 < argc)
           dir = std::string(argv[i + 2]);
