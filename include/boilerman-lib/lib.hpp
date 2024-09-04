@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <string>
-#include <fetalib/directories.hpp>
+#include <fetalib/files/directories.hpp>
 
 #include "boiler.hpp"
 
