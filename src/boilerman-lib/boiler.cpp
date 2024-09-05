@@ -20,7 +20,7 @@ Boiler::Boiler(std::string dir_path)
 }
 
 void Boiler::use(std::filesystem::path output_path, std::map<std::string, std::string> resolve_map) {
-  fmt::print(fg(fmt::rgb(feta::color::cyan)), "using {} to create {}\n", _name, resolve_map["name"]);
+  fmt::print(fg(fmt::rgb(feta::color::blue)), "using {} to create {}\n", _name, resolve_map["name"]);
   recursive_resolve_copy(_path, output_path, resolve_map);
   fmt::print(fg(fmt::rgb(feta::color::green)), "\n{} successfully initialized\n", resolve_map["name"]);
 }

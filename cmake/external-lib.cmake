@@ -11,7 +11,7 @@ include(FetchContent)
 FetchContent_Declare(
   fetalib
   GIT_REPOSITORY https://github.com/SPoovathumkadavil/fetalib.git
-  GIT_TAG v0.1.3
+  GIT_TAG v0.1.4
 )
 FetchContent_MakeAvailable(fetalib)
 target_link_libraries(boilerman_lib

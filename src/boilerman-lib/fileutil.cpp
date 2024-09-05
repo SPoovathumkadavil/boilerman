@@ -31,7 +31,7 @@ std::string resolve_string(std::string str,
 void recursive_resolve(std::filesystem::path dir_path,
                        std::map<std::string, std::string> resolve_map)
 {
-  fmt::print(fg(fmt::rgb(feta::color::cyan)),
+  fmt::print(fg(fmt::rgb(feta::color::blue)),
              "resolving files to {}\n",
              std::string(dir_path));
   if (std::filesystem::is_directory(dir_path)) {
@@ -45,7 +45,7 @@ void recursive_resolve(std::filesystem::path dir_path,
       // entry resolver
       path_name = resolve_string(path_name, resolve_map);
 
-      fmt::print(fg(fmt::rgb(feta::color::cyan)),
+      fmt::print(fg(fmt::rgb(feta::color::blue)),
                  "resolving {} --> {}\n",
                  std::string(dir_entry.path().filename()),
                  std::string(path_name));
@@ -78,7 +78,7 @@ void recursive_resolve_copy(std::filesystem::path input_dir_path,
                             std::filesystem::path output_dir_path,
                             std::map<std::string, std::string> resolve_map)
 {
-  fmt::print(fg(fmt::rgb(feta::color::cyan)),
+  fmt::print(fg(fmt::rgb(feta::color::blue)),
              "resolving files to {}\n",
              std::string(output_dir_path));
   if (!std::filesystem::exists(output_dir_path)) {
@@ -106,7 +106,7 @@ void recursive_resolve_copy(std::filesystem::path input_dir_path,
       // entry resolver
       new_path = resolve_string(new_path, resolve_map);
 
-      fmt::print(fg(fmt::rgb(feta::color::cyan)),
+      fmt::print(fg(fmt::rgb(feta::color::blue)),
                  "resolving {} --> {}\n",
                  std::string(dir_entry.path().filename()),
                  std::string(new_path));
