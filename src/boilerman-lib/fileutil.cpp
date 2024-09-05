@@ -5,6 +5,7 @@
 #include "fileutil.hpp"
 
 #include <fmt/color.h>
+#include <fetalib/cli/colors.hpp>
 
 std::string resolve_string(std::string str,
                            std::map<std::string, std::string> resolve_map)
@@ -30,7 +31,7 @@ std::string resolve_string(std::string str,
 void recursive_resolve(std::filesystem::path dir_path,
                        std::map<std::string, std::string> resolve_map)
 {
-  fmt::print(fg(fmt::color::sky_blue),
+  fmt::print(fg(fmt::rgb(feta::color::cyan)),
              "resolving files to {}\n",
              std::string(dir_path));
   if (std::filesystem::is_directory(dir_path)) {
@@ -39,12 +40,12 @@ void recursive_resolve(std::filesystem::path dir_path,
     {
       std::string path_name = dir_entry.path();
 
-      fmt::print(fg(fmt::color::pale_violet_red), "{}", path_name);
+      fmt::print(fg(fmt::rgb(feta::color::red)), "{}", path_name);
 
       // entry resolver
       path_name = resolve_string(path_name, resolve_map);
 
-      fmt::print(fg(fmt::color::sky_blue),
+      fmt::print(fg(fmt::rgb(feta::color::cyan)),
                  "resolving {} --> {}\n",
                  std::string(dir_entry.path().filename()),
                  std::string(path_name));
@@ -77,14 +78,14 @@ void recursive_resolve_copy(std::filesystem::path input_dir_path,
                             std::filesystem::path output_dir_path,
                             std::map<std::string, std::string> resolve_map)
 {
-  fmt::print(fg(fmt::color::sky_blue),
+  fmt::print(fg(fmt::rgb(feta::color::cyan)),
              "resolving files to {}\n",
              std::string(output_dir_path));
   if (!std::filesystem::exists(output_dir_path)) {
     std::filesystem::create_directories(output_dir_path);
   }
   if (!std::filesystem::is_empty(output_dir_path)) {
-    fmt::print(fg(fmt::color::pale_violet_red),
+    fmt::print(fg(fmt::rgb(feta::color::red)),
                "target directory ({}) is not empty.\n",
                std::string(output_dir_path));
     throw std::invalid_argument("target dir is not empty.");
@@ -105,7 +106,7 @@ void recursive_resolve_copy(std::filesystem::path input_dir_path,
       // entry resolver
       new_path = resolve_string(new_path, resolve_map);
 
-      fmt::print(fg(fmt::color::sky_blue),
+      fmt::print(fg(fmt::rgb(feta::color::cyan)),
                  "resolving {} --> {}\n",
                  std::string(dir_entry.path().filename()),
                  std::string(new_path));
