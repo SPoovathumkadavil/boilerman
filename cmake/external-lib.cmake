@@ -11,7 +11,7 @@ include(FetchContent)
 FetchContent_Declare(
   fetalib
   GIT_REPOSITORY https://github.com/SPoovathumkadavil/fetalib.git
-  GIT_TAG v0.1.4
+  GIT_TAG v0.1.7
 )
 FetchContent_MakeAvailable(fetalib)
 target_link_libraries(boilerman_lib
@@ -28,9 +28,9 @@ target_link_libraries(boilerman_lib
 # target_link_libraries(boilerman_lib raylib)
 
 # ---- fmt ----
-FetchContent_Declare(
-  fmt
-  GIT_REPOSITORY https://github.com/fmtlib/fmt
-  GIT_TAG        e69e5f977d458f2650bb346dadf2ad30c5320281) # 10.2.1
-FetchContent_MakeAvailable(fmt)
-target_link_libraries(boilerman_lib fmt::fmt)
+# FetchContent_Declare(
+#   fmt
+#   GIT_REPOSITORY https://github.com/fmtlib/fmt
+#   GIT_TAG        e69e5f977d458f2650bb346dadf2ad30c5320281) # 10.2.1
+# FetchContent_MakeAvailable(fmt)
+# target_link_libraries(boilerman_lib fmt::fmt)

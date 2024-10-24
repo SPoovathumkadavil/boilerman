@@ -2,10 +2,9 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
-#include "fileutil.hpp"
-
-#include <fmt/color.h>
 #include <fetalib/cli/colors.hpp>
+
+#include "fileutil.hpp"
 
 std::string resolve_string(std::string str,
                            std::map<std::string, std::string> resolve_map)
@@ -31,24 +30,18 @@ std::string resolve_string(std::string str,
 void recursive_resolve(std::filesystem::path dir_path,
                        std::map<std::string, std::string> resolve_map)
 {
-  fmt::print(fg(fmt::rgb(feta::color::blue)),
-             "resolving files to {}\n",
-             std::string(dir_path));
+  std::printf(feta::colorize("resolving files to %s\n", feta::Color::BLUE).c_str(), dir_path.c_str());
+  
   if (std::filesystem::is_directory(dir_path)) {
     for (const auto& dir_entry :
          std::filesystem::recursive_directory_iterator(dir_path))
     {
       std::string path_name = dir_entry.path();
 
-      fmt::print(fg(fmt::rgb(feta::color::red)), "{}", path_name);
-
       // entry resolver
       path_name = resolve_string(path_name, resolve_map);
 
-      fmt::print(fg(fmt::rgb(feta::color::blue)),
-                 "resolving {} --> {}\n",
-                 std::string(dir_entry.path().filename()),
-                 std::string(path_name));
+      std::printf(feta::colorize("resolving %s --> %s\n", feta::Color::BLUE).c_str(), dir_entry.path().filename().c_str(), path_name.c_str());
 
       // if file
       if (dir_entry.is_regular_file()) {
@@ -78,16 +71,13 @@ void recursive_resolve_copy(std::filesystem::path input_dir_path,
                             std::filesystem::path output_dir_path,
                             std::map<std::string, std::string> resolve_map)
 {
-  fmt::print(fg(fmt::rgb(feta::color::blue)),
-             "resolving files to {}\n",
-             std::string(output_dir_path));
+  std::printf(feta::colorize("resolving files to %s\n", feta::Color::BLUE).c_str(), output_dir_path.c_str());
+  
   if (!std::filesystem::exists(output_dir_path)) {
     std::filesystem::create_directories(output_dir_path);
   }
   if (!std::filesystem::is_empty(output_dir_path)) {
-    fmt::print(fg(fmt::rgb(feta::color::red)),
-               "target directory ({}) is not empty.\n",
-               std::string(output_dir_path));
+    std::printf(feta::colorize("target directory (%s) is not empty.\n", feta::Color::RED).c_str(), output_dir_path.c_str());
     throw std::invalid_argument("target dir is not empty.");
   }
   // search for substrings and replace with actual
@@ -106,10 +96,7 @@ void recursive_resolve_copy(std::filesystem::path input_dir_path,
       // entry resolver
       new_path = resolve_string(new_path, resolve_map);
 
-      fmt::print(fg(fmt::rgb(feta::color::blue)),
-                 "resolving {} --> {}\n",
-                 std::string(dir_entry.path().filename()),
-                 std::string(new_path));
+      std::printf(feta::colorize("resolving %s --> %s\n", feta::Color::BLUE).c_str(), dir_entry.path().filename().c_str(), new_path.c_str());
 
       // if file
       if (dir_entry.is_regular_file()) {

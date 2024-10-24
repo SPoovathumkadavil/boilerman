@@ -2,7 +2,6 @@
 #include "main.hpp"
 
 #include <fetalib/cli/colors.hpp>
-#include <fmt/color.h>
 
 #include "boiler.hpp"
 
@@ -12,10 +11,7 @@ int main(int argc, char** argv)
   auto boilers = lib.populate_boilers();
 
   if (argc < 2) {
-    fmt::print(fg(fmt::rgb(feta::color::red)),
-               "error: no arguments provided.\ntry {} --help for usage "
-               "instructions.\n",
-               lib._name);
+    std::printf(feta::colorize("error: no arguments provided.\ntry %s --help for usage instructions.\n", feta::Color::RED).c_str(), lib._name.c_str());
     return 1;
   }
 
@@ -25,56 +21,41 @@ int main(int argc, char** argv)
 
   for (int i = 0; i < argc; i++) {
     if (std::string(argv[i]) == "--help" || std::string(argv[i]) == "-h") {
-      fmt::print(fg(fmt::rgb(feta::color::blue)),
-                 "usage: {} [options] [command]\n",
-                 lib._name);
-      fmt::print(fg(fmt::rgb(feta::color::blue)), "options:\n");
-      fmt::print(fg(fmt::rgb(feta::color::blue)),
-                 "\t-n, --name [name]\t\tset name.\n");
-      fmt::print(fg(fmt::rgb(feta::color::blue)), "commands:\n");
-      fmt::print(fg(fmt::rgb(feta::color::blue)),
-                 "\ti, init [index]\t\tinitialize a boilerplate.\n");
-      fmt::print(fg(fmt::rgb(feta::color::blue)),
-                 "\ta, add [dir]\t\tadd a boilerplate.\n");
-      fmt::print(fg(fmt::rgb(feta::color::blue)),
-                 "\t-h, --help\t\tshow this help message.\n");
-      fmt::print(fg(fmt::rgb(feta::color::blue)),
-                 "\t-l, --list\t\tlist available boilerplates.\n");
+      std::printf(feta::colorize("usage: %s [options] [command]\n", feta::Color::BLUE).c_str(), lib._name.c_str());
+      std::printf(feta::colorize("options:\n", feta::Color::BLUE).c_str());
+      std::printf(feta::colorize("\t-n, --name [name]\t\tset name.\n", feta::Color::BLUE).c_str());
+      std::printf(feta::colorize("commands:\n", feta::Color::BLUE).c_str());
+      std::printf(feta::colorize("\ti, init [index]\t\tinitialize a boilerplate.\n", feta::Color::BLUE).c_str());
+      std::printf(feta::colorize("\ta, add [dir]\t\tadd a boilerplate.\n", feta::Color::BLUE).c_str());
+      std::printf(feta::colorize("\t-h, --help\t\tshow this help message.\n", feta::Color::BLUE).c_str());
+      std::printf(feta::colorize("\t-l, --list\t\tlist available boilerplates.\n", feta::Color::BLUE).c_str());
       return 0;
     }
 
     if (std::string(argv[i]) == "--list" || std::string(argv[i]) == "-l") {
       for (int b = 0; b < (int)boilers.size(); b++) {
-        fmt::print(fg(fmt::rgb(feta::color::blue)),
-                   "{} - {}: {} ({})\n",
-                   b + 1,
-                   boilers[b]._lang,
-                   boilers[b]._desc,
-                   boilers[b]._type);
+        std::printf(feta::colorize("%i - %s: %s (%s)\n", feta::Color::BLUE).c_str(), b + 1,
+                   boilers[b]._lang.c_str(),
+                   boilers[b]._desc.c_str(),
+                   boilers[b]._type.c_str());
       }
       return 0;
     }
 
     if (std::string(argv[i]) == "init" || std::string(argv[i]) == "i") {
       if (i + 1 >= argc) {
-        fmt::print(fg(fmt::rgb(feta::color::blue)),
-                   "available boilerplates:\n");
+        std::printf(feta::colorize("available boilerplates:\n", feta::Color::BLUE).c_str());
         for (int b = 0; b < (int)boilers.size(); b++) {
-          fmt::print(fg(fmt::rgb(feta::color::blue)),
-                     "\t {}. {} := {} ({})\n",
-                     b + 1,
-                     boilers[b]._lang,
-                     boilers[b]._desc,
-                     boilers[b]._type);
+          std::printf(feta::colorize("%i - %s: %s (%s)\n", feta::Color::BLUE).c_str(), b + 1,
+                      boilers[b]._lang.c_str(),
+                      boilers[b]._desc.c_str(),
+                      boilers[b]._type.c_str());
         }
 
         // read boiler index
         int u_ind = -1;
         while (u_ind < 0) {
-          fmt::print(fg(fmt::rgb(feta::color::blue)),
-                     "enter index {}-{}: ",
-                     1,
-                     (int)boilers.size());
+          std::printf(feta::colorize("enter index %i-%i: ", feta::Color::BLUE).c_str(), 1, (int)boilers.size());
           std::cin >> u_ind;
           if (u_ind < 1 || u_ind > (int)boilers.size())
             u_ind = -1;
@@ -82,11 +63,10 @@ int main(int argc, char** argv)
         b_index = u_ind - 1;
 
         // read project name
-        fmt::print(fg(fmt::rgb(feta::color::blue)), "project name: ");
+        std::printf(feta::colorize("project name: ", feta::Color::BLUE).c_str());
         std::cin >> project_name;
-
         // read boiler destination directory
-        fmt::print(fg(fmt::rgb(feta::color::blue)), "destination directory: ");
+        std::printf(feta::colorize("destination directory: ", feta::Color::BLUE).c_str());
         std::cin >> dir;
       } else {
         b_index = std::stoi(argv[i + 1]) - 1;
@@ -98,10 +78,7 @@ int main(int argc, char** argv)
 
     if (std::string(argv[i]) == "--name" || std::string(argv[i]) == "-n") {
       if (i + 1 >= argc) {
-        fmt::print(fg(fmt::rgb(feta::color::red)),
-                   "error: project name not provided.\ntry {} --help for usage "
-                   "instructions.\n",
-                   lib._name);
+        std::printf(feta::colorize("error: project name not provided.\ntry %s --help for usage instructions.\n", feta::Color::RED).c_str(), lib._name.c_str());
         return 1;
       }
 
