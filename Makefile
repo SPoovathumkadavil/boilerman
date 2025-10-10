@@ -19,7 +19,7 @@ LIBNAMES := $(patsubst lib%.so, %, $(LIBS))
 
 CC = g++
 CFLAGS = -std=c++17 -Wall -fPIC -I$(GLOBAL_INC_DIR) -I$(INC_DIR)
-LDFLAGS = -L$(GLOBAL_LIB_DIR) -L$(LIB_DIR) $(addprefix -l,$(LIBNAMES))
+LDFLAGS = # -L$(GLOBAL_LIB_DIR) -L$(LIB_DIR) $(addprefix -l,$(LIBNAMES))
 TARGET = $(TARGET_DIR)/$(APP_NAME)
 
 # Default target
@@ -34,7 +34,7 @@ install: uninstall
 	cp -r $(LIBRARY_DIR) $(GLOBAL_LIBRARY_DIR)/$(APP_NAME)
 
 uninstall:
-	rm $(INSTALL_DIR)/$(notdir $(TARGET))
+	rm -f $(INSTALL_DIR)/$(notdir $(TARGET))
 	rm -rf $(GLOBAL_LIBRARY_DIR)/$(APP_NAME)
 
 # Rule to build the shared library
