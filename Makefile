@@ -1,9 +1,7 @@
 
 APP_NAME = boilerman
 
-GLOBAL_LIB_DIR = $(HOME)/.local/libs
 GLOBAL_LIBRARY_DIR = $(HOME)/.local/library
-GLOBAL_INC_DIR = $(HOME)/.local/include
 INSTALL_DIR = $(HOME)/.local/bin
 LIB_DIR = libs
 LIBRARY_DIR = library
@@ -18,7 +16,7 @@ LIBS := $(notdir $(wildcard $(LIB_DIR)/*))
 LIBNAMES := $(patsubst lib%.so, %, $(LIBS))
 
 CC = g++
-CFLAGS = -std=c++17 -Wall -fPIC -I$(GLOBAL_INC_DIR) -I$(INC_DIR)
+CFLAGS = -std=c++17 -Wall -fPIC -I$(INC_DIR)
 LDFLAGS = # -L$(GLOBAL_LIB_DIR) -L$(LIB_DIR) $(addprefix -l,$(LIBNAMES))
 TARGET = $(TARGET_DIR)/$(APP_NAME)
 
@@ -26,9 +24,7 @@ TARGET = $(TARGET_DIR)/$(APP_NAME)
 build: $(TARGET)
 
 install: uninstall
-	mkdir -p $(GLOBAL_LIB_DIR)
 	mkdir -p $(GLOBAL_LIBRARY_DIR)
-	mkdir -p $(GLOBAL_INC_DIR)
 	mkdir -p $(INSTALL_DIR)
 	cp $(TARGET) $(INSTALL_DIR)
 	cp -r $(LIBRARY_DIR) $(GLOBAL_LIBRARY_DIR)/$(APP_NAME)

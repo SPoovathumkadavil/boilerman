@@ -200,10 +200,11 @@ int main(int argc, char **argv) {
   boilerplate bp = bps.at(chosen_index);
   std::vector<std::string> vars = find_var_names(bp.src_dir, "|||");
   std::map<std::string, std::string> res_map;
+  std::cin.ignore();
   for (std::string var : vars) {
     std::printf("Project Detail -- %s: ", var.c_str());
     std::string val;
-    std::cin >> val;
+    std::getline(std::cin, val);
     res_map[var] = val;
   }
 
