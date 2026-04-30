@@ -2,15 +2,10 @@
 
 #include <filesystem>
 #include <map>
-#include <stdlib.h>
 #include <string>
 #include <vector>
 
 // -- file utils --
-
-const static std::filesystem::path bp_dir =
-    std::filesystem::path(getenv("HOME"))
-        .append(".local/library/boilerman/boilerplates");
 
 std::vector<std::filesystem::path> get_all_directories(std::filesystem::path p);
 std::string read_file(std::filesystem::path path);
@@ -30,6 +25,10 @@ struct boilerplate {
   std::map<std::string, std::string> tags;
 };
 
-std::vector<boilerplate> load_boilerplates();
-std::string get_printable(boilerplate *b);
-int main(int argc, char **argv);
+std::filesystem::path default_boilerplate_dir();
+boilerplate parse_boilerplate_dir(std::filesystem::path dir);
+std::vector<boilerplate>
+load_boilerplates(std::filesystem::path boilerplate_dir =
+                      default_boilerplate_dir());
+std::string get_printable(const boilerplate &b);
+int run_interactive_app();
