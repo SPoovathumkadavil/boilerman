@@ -1,6 +1,6 @@
 install(
-    TARGETS |||name|||_exe
-    RUNTIME COMPONENT |||name|||_Runtime
+    TARGETS |||target_name|||_exe
+    RUNTIME COMPONENT |||target_name|||_Runtime
 )
 
 if(PROJECT_IS_TOP_LEVEL)

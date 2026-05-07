@@ -1,7 +1,6 @@
-
-
 BUILD_DIR = build
-TARGET = |||target_name|||
+
+.PHONY: build build-tests clean install
 
 build:
 	cmake -S . -B $(BUILD_DIR)
@@ -11,5 +10,8 @@ build-tests:
 	cmake -S . -B $(BUILD_DIR) -D |||cpp_name|||_DEVELOPER_MODE=ON
 	cmake --build $(BUILD_DIR)
 
-run:
-	$(BUILD_DIR)/$(TARGET)
+install:
+	cmake --install $(BUILD_DIR)
+
+clean:
+	rm -rf $(BUILD_DIR)

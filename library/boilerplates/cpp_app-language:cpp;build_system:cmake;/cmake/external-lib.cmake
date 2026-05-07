@@ -3,7 +3,7 @@
 
 # find_package(fetalib REQUIRED)
 # message("-- Package \"fetalib\" found: ${fetalib_FOUND}")
-# target_link_libraries(|||name|||_exe fetalib::files)
+# target_link_libraries(|||target_name|||_exe PRIVATE fetalib::files)
 
 # --- remote ---
 
@@ -15,5 +15,4 @@
 #   GIT_TAG v0.2
 # )
 # FetchContent_MakeAvailable(fetalib)
-# target_link_libraries(|||name|||_exe fetalib::files)
-
+# target_link_libraries(|||target_name|||_exe PRIVATE fetalib::files)

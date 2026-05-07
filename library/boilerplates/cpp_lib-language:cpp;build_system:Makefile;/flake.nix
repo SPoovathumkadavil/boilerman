@@ -1,5 +1,5 @@
 {
-  description = "c++ flake for |||project_name|||";
+  description = "c++ library flake for |||project_name|||";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -14,15 +14,15 @@
       {
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
-            gnumake # for 'make'
-            clang-tools # for clangd
-            clang # or gcc
-            gdb # for debugging
-            bear # for compile_db
+            gnumake
+            clang-tools
+            clang
+            gdb
+            bear
           ];
 
           shellHook = ''
-            echo "entering c++ development shell for |||project_name|||..."
+            echo "entering c++ library development shell for |||project_name|||..."
           '';
         };
       });
